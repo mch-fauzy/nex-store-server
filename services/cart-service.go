@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/gofrs/uuid"
 	"github.com/nexmedis-be-technical-test/models"
 	"github.com/nexmedis-be-technical-test/models/dto"
 	"github.com/rs/zerolog/log"
@@ -9,7 +10,13 @@ import (
 func (s *Service) UserCartAddItem(req dto.UserCartAddItemRequest) (string, error) {
 	message := "Failed"
 
-	_, err := s.Repository.ProductFindById(models.ProductPrimaryId{Id: req.ProductId})
+	_, err := s.Repository.UserFindById(models.UserPrimaryId{Id: uuid.FromStringOrNil(req.UserId)})
+	if err != nil {
+		log.Error().Err(err).Msg("[UserCartAddItem] Service error retrieving user by id")
+		return message, err
+	}
+
+	_, err = s.Repository.ProductFindById(models.ProductPrimaryId{Id: req.ProductId})
 	if err != nil {
 		log.Error().Err(err).Msg("[UserCartAddItem] Service error retrieving product by id")
 		return message, err
@@ -70,6 +77,12 @@ func (s *Service) UserCartAddItem(req dto.UserCartAddItemRequest) (string, error
 
 func (s *Service) UserCartGetList(req dto.UserCartGetListRequest) ([]dto.UserCartGetListResponse, error) {
 	var responses []dto.UserCartGetListResponse
+
+	_, err := s.Repository.UserFindById(models.UserPrimaryId{Id: uuid.FromStringOrNil(req.UserId)})
+	if err != nil {
+		log.Error().Err(err).Msg("[UserCartGetList] Service error retrieving user by id")
+		return responses, err
+	}
 
 	userCarts, _, err := s.Repository.UserCartFindManyAndCountByFilter(models.Filter{
 		FilterFields: []models.FilterField{

@@ -46,7 +46,7 @@ func (r *Repository) UserFindById(primaryId models.UserPrimaryId) (models.User, 
 	err := userData.Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return user, failure.BadRequest("User is not found")
+			return user, failure.BadRequest("User not found")
 		}
 		log.Error().Err(err).Msg("[UserFindById] Repository error retrieving user by id")
 		return user, err

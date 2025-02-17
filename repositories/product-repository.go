@@ -15,7 +15,7 @@ func (r *Repository) ProductFindById(primaryId models.ProductPrimaryId) (models.
 	err := productData.Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return models.Product{}, failure.BadRequest("Product is not found")
+			return models.Product{}, failure.BadRequest("Product not found")
 		}
 		log.Error().Err(err).Msg("[ProductFindById] Repository error retrieving product by id")
 		return models.Product{}, err
