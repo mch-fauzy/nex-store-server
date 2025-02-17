@@ -17,6 +17,10 @@ func (r TransactionTopUpBalanceByUserIdRequest) Validate() error {
 		return failure.BadRequest("User id is required")
 	}
 
+	if r.Email == "" {
+		return failure.BadRequest("Email is required")
+	}
+
 	return nil
 }
 
@@ -39,9 +43,35 @@ func (r TransactionWithdrawBalanceByUserIdRequest) Validate() error {
 		return failure.BadRequest("User id is required")
 	}
 
+	if r.Email == "" {
+		return failure.BadRequest("Email is required")
+	}
+
 	return nil
 }
 
 type TransactionWithdrawBalanceByUserIdResponse struct {
 	Balance float32 `json:"balance"`
+}
+
+type TransactionPurchaseCartRequest struct {
+	UserId string `json:"-"`
+	Email  string `json:"-"`
+}
+
+func (r TransactionPurchaseCartRequest) Validate() error {
+	if r.UserId == "" {
+		return failure.BadRequest("User id is required")
+	}
+
+	if r.Email == "" {
+		return failure.BadRequest("Email is required")
+	}
+
+	return nil
+}
+
+type TransactionPurchaseCartResponse struct {
+	InvoiceNumber string  `json:"invoiceNumber"`
+	TotalAmount   float32 `json:"totalAmount"`
 }

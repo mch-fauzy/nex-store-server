@@ -17,4 +17,9 @@ func TransactionV1Routes(r chi.Router, handler handlers.Handler) {
 		r.Use(middlewares.AuthenticateToken)
 		r.Patch("/", handler.TransactionWithdrawBalanceByUserId)
 	})
+
+	r.Route("/purchase", func(r chi.Router) {
+		r.Use(middlewares.AuthenticateToken)
+		r.Post("/", handler.TransactionPurchaseCart)
+	})
 }
